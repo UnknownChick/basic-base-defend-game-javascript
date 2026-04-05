@@ -1,68 +1,40 @@
+import { Entity } from "./js/classes/Entity";
+
 const canvas = document.querySelector('canvas');
 const ctx = canvas.getContext('2d');
 
 canvas.width = innerWidth;
 canvas.height = innerHeight;
 
-class Player {
-	constructor(x, y, radius, color) {
-		this.x = x;
-		this.y = y;
-		this.radius = radius;
-		this.color = color;
-	}
-
-	draw() {
-		ctx.beginPath();
-		ctx.arc(this.x, this.y, this.radius, 0, Math.PI * 2, false);
-		ctx.fillStyle = this.color;
-		ctx.fill();
+class Player extends Entity {
+	update(ctx) {
+		this.draw(ctx);
 	}
 }
 
-class Projectile {
+class Projectile extends Entity {
 	constructor(x, y, radius, color, velocity) {
-		this.x = x;
-		this.y = y;
-		this.radius = radius;
-		this.color = color;
+		super(x, y, radius, color);
 		this.velocity = velocity;
 	}
 
-	draw() {
-		ctx.beginPath();
-		ctx.arc(this.x, this.y, this.radius, 0, Math.PI * 2, false);
-		ctx.fillStyle = this.color;
-		ctx.fill();
-	}
-
-	update() {
-		this.draw();
-		this.x = this.x + this.velocity.x;
-		this.y = this.y + this.velocity.y;
+	update(ctx) {
+		this.draw(ctx);
+		this.x += this.velocity.x;
+		this.y += this.velocity.y;
 	}
 }
 
-class Enemy {
+class Enemy extends Entity {
 	constructor(x, y, radius, color, velocity) {
-		this.x = x;
-		this.y = y;
-		this.radius = radius;
-		this.color = color;
+		super(x, y, radius, color);
 		this.velocity = velocity;
 	}
 
-	draw() {
-		ctx.beginPath();
-		ctx.arc(this.x, this.y, this.radius, 0, Math.PI * 2, false);
-		ctx.fillStyle = this.color;
-		ctx.fill();
-	}
-
-	update() {
-		this.draw();
-		this.x = this.x + this.velocity.x;
-		this.y = this.y + this.velocity.y;
+	update(ctx) {
+		this.draw(ctx);
+		this.x += this.velocity.x;
+		this.y += this.velocity.y;
 	}
 }
 
@@ -106,15 +78,15 @@ function spawnEnemies() {
 function animate() {
 	requestAnimationFrame(animate);
 	ctx.clearRect(0, 0, canvas.width, canvas.height);
-	player.draw();
+
+	player.draw(ctx);
+
 	projectiles.forEach((projectile) => {
-		projectile.update();
-		projectile.draw();
+		projectile.update(ctx);
 	});
 
 	enemies.forEach((enemy) => {
-		enemy.update();
-		enemy.draw();
+		enemy.update(ctx);
 	});
 }
 
